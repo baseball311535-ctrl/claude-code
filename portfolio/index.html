@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>そん. | 焙煎店特化 LINE構築ポートフォリオ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --cream: #FFFAF5;
+      --beige: #F5EDE4;
+      --text: #2C1A0E;
+      --accent: #7B4F2E;
+      --tag-bg: #EDE0D4;
+      --border: #D9C9B8;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========== HEADER ========== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 250, 245, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    nav ul a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      text-decoration: none;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+
+    nav ul a:hover {
+      opacity: 1;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      transition: all 0.3s;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      z-index: 99;
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu ul {
+      list-style: none;
+      padding: 16px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-menu ul a {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0.8;
+    }
+
+    /* ========== SECTION COMMON ========== */
+    section {
+      padding: 96px 0;
+    }
+
+    section:nth-child(even) {
+      background-color: var(--beige);
+    }
+
+    .section-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    /* ========== HERO ========== */
+    #hero {
+      padding: 160px 0 96px;
+      background-color: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-deco {
+      position: absolute;
+      top: 80px;
+      right: -20px;
+      font-size: 180px;
+      opacity: 0.06;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .hero-inner {
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 7vw, 48px);
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text);
+      opacity: 0.75;
+      max-width: 500px;
+      margin-bottom: 48px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 14px 36px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+
+    /* ========== ABOUT ========== */
+    #about {
+      background-color: var(--beige);
+    }
+
+    .about-profile {
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .about-avatar {
+      flex-shrink: 0;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: var(--beige);
+    }
+
+    .about-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      mix-blend-mode: multiply;
+      display: block;
+    }
+
+    .about-name-block {
+      padding-top: 8px;
+    }
+
+    .about-name {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background: var(--tag-bg);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      border: 1px solid var(--border);
+    }
+
+    .about-text {
+      font-size: 15px;
+      line-height: 2;
+      color: var(--text);
+      opacity: 0.85;
+    }
+
+    .about-text p + p {
+      margin-top: 20px;
+    }
+
+    /* ========== STRENGTHS ========== */
+    #strengths {
+      background-color: var(--cream);
+    }
+
+    .strengths-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .strength-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 12px rgba(44, 26, 14, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .strength-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(44, 26, 14, 0.09);
+    }
+
+    .strength-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--accent);
+      opacity: 0.35;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .strength-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 0.03em;
+    }
+
+    .strength-desc {
+      font-size: 13px;
+      line-height: 1.85;
+      color: var(--text);
+      opacity: 0.72;
+    }
+
+    /* ========== WORKS ========== */
+    #works {
+      background-color: var(--beige);
+    }
+
+    .works-list {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .work-card {
+      background: var(--cream);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(44, 26, 14, 0.07);
+      display: grid;
+      grid-template-columns: 200px 1fr;
+    }
+
+    .work-phone-wrap {
+      background: var(--beige);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+    }
+
+    .phone-frame {
+      width: 130px;
+      background: #1a1a1a;
+      border-radius: 24px;
+      padding: 10px 6px 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 0 0 1px #333;
+      position: relative;
+    }
+
+    .phone-notch {
+      width: 44px;
+      height: 8px;
+      background: #1a1a1a;
+      border-radius: 0 0 8px 8px;
+      margin: 0 auto 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .phone-screen {
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 9/16;
+      background: #000;
+    }
+
+    .phone-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .work-body {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .work-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .work-tag {
+      background: var(--tag-bg);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      letter-spacing: 0.04em;
+    }
+
+    .work-place {
+      font-size: 12px;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    .work-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+    }
+
+    .work-section {
+      font-size: 13px;
+      line-height: 1.85;
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .work-section-label {
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .work-section + .work-section {
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .work-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .work-section ul li::before {
+      content: '・';
+      color: var(--accent);
+    }
+
+    /* ========== CONTACT ========== */
+    #contact {
+      background-color: var(--cream);
+      text-align: center;
+    }
+
+    #contact .section-label,
+    #contact .section-title {
+      text-align: center;
+    }
+
+    .contact-sub {
+      font-size: 15px;
+      line-height: 2;
+      opacity: 0.72;
+      margin-bottom: 48px;
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background-color: var(--text);
+      color: rgba(255, 250, 245, 0.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    footer .footer-logo {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255, 250, 245, 0.85);
+      margin-bottom: 12px;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 640px) {
+      nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      #hero {
+        padding: 120px 0 72px;
+      }
+
+      .hero-deco {
+        font-size: 120px;
+        top: 60px;
+        right: -10px;
+      }
+
+      .hero-title {
+        font-size: 30px;
+      }
+
+      .about-profile {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+      }
+
+      .about-name-block {
+        padding-top: 0;
+      }
+
+      .tags {
+        justify-content: center;
+      }
+
+      .strengths-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .work-card {
+        grid-template-columns: 1fr;
+      }
+
+      .work-phone-wrap {
+        padding: 24px 20px 12px;
+      }
+
+      .phone-frame {
+        width: 160px;
+      }
+
+      .work-body {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="#hero" class="logo">そん.</a>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#strengths">Strengths</a></li>
+          <li><a href="#works">Works</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#strengths" class="mobile-link">Strengths</a></li>
+      <li><a href="#works" class="mobile-link">Works</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-deco">☕</div>
+        <p class="hero-eyebrow">LINE Construction for Coffee Roasters</p>
+        <h1 class="hero-title">焙煎所に、<br>人の温度を。</h1>
+        <p class="hero-sub">
+          コーヒーが好きだから、わかることがある。<br>
+          オーナーの想いをLINEで届ける、焙煎店特化のLINE構築。
+        </p>
+        <a href="#works" class="btn-primary">設計事例を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label">About</p>
+      <h2 class="section-title">コーヒーへの愛から<br>始まった、LINE構築。</h2>
+
+      <div class="about-profile">
+        <div class="about-avatar">
+          <img src="images/avatar.png" alt="そん プロフィール写真">
+        </div>
+        <div class="about-name-block">
+          <p class="about-name">そん</p>
+          <div class="tags">
+            <span class="tag">LINE構築</span>
+            <span class="tag">焙煎店特化</span>
+            <span class="tag">note発信</span>
+            <span class="tag">人の温度を大切にする設計</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <p>
+          はじめまして、そんです。<br>
+          コーヒーが好きで、独立系の焙煎所やカフェをよく訪れます。<br>
+          チェーン店にはない「会話」や「空気感」が好きで、<br>
+          そういうお店のLINEには、人の温度が残っていてほしいと思っています。
+        </p>
+        <p>
+          そんな想いから、焙煎店・コーヒー豆販売店に特化した<br>
+          LINE構築・運用サポートを提供しています。<br>
+          冷たい自動化ではなく、お店らしさが伝わる言葉・導線を一緒に作ります。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRENGTHS -->
+  <section id="strengths">
+    <div class="container">
+      <p class="section-label">Strengths</p>
+      <h2 class="section-title">選ばれる理由、<br>5つの強み。</h2>
+
+      <div class="strengths-grid">
+        <div class="strength-card">
+          <p class="strength-num">01</p>
+          <p class="strength-title">焙煎店への業界特化</p>
+          <p class="strength-desc">コーヒー好きとして焙煎所に通い続けてきたから、オーナーの悩みや、お客さんとの距離感がわかる。</p>
+        </div>
+        <div class="strength-card">
+          <p class="strength-num">02</p>
+          <p class="strength-title">人の温度が残る設計</p>
+          <p class="strength-desc">自動化しつつも「このお店らしさ」が伝わる言葉・導線を意識。迷わない、詰め込まない、温かいLINEを作ります。</p>
+        </div>
+        <div class="strength-card">
+          <p class="strength-num">03</p>
+          <p class="strength-title">ノウハウの言語化力</p>
+          <p class="strength-desc">焙煎店向けLINE記事をnoteで50本以上発信。知識を整理して、オーナーにわかりやすく伝えることが得意。</p>
+        </div>
+        <div class="strength-card">
+          <p class="strength-num">04</p>
+          <p class="strength-title">三方良し視点</p>
+          <p class="strength-desc">お客様・オーナー・自分、全員にとって良い設計を常に意識。「作って終わり」ではなく、運用まで考えた提案をします。</p>
+        </div>
+        <div class="strength-card">
+          <p class="strength-num">05</p>
+          <p class="strength-title">地道な継続力</p>
+          <p class="strength-desc">副業×発信を並行しながら、着実に積み上げてきました。継続することを苦にしない粘り強さが強みです。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKS -->
+  <section id="works">
+    <div class="container">
+      <p class="section-label">Works</p>
+      <h2 class="section-title">設計事例、<br>3つの実績。</h2>
+
+      <div class="works-list">
+
+        <!-- 事例1: まちかど珈琲 -->
+        <div class="work-card">
+          <div class="work-phone-wrap">
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <img src="images/machikado.jpg" alt="まちかど珈琲 LINE設計スクリーンショット">
+              </div>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">架空設計事例</span>
+              <span class="work-place">📍 群馬県みなかみ町の焙煎所</span>
+            </div>
+            <h3 class="work-title">まちかど珈琲</h3>
+            <div class="work-section">
+              <p class="work-section-label">📌 課題</p>
+              <p>取り置き予約の電話対応がスタッフの負担になっていた。予約状況の管理も手作業で、抜け漏れが起きやすかった。</p>
+            </div>
+            <div class="work-section">
+              <p class="work-section-label">✅ 施策</p>
+              <ul>
+                <li>リッチメニュー3分割「取り置き予約」「今月のおすすめコーヒー」「営業時間・アクセス」</li>
+                <li>5〜6ステップ以内で完結する予約導線を設計</li>
+                <li>LINEのみでスマホ決済まで完結できるフローを構築</li>
+              </ul>
+            </div>
+            <div class="work-section">
+              <p class="work-section-label">💡 想定効果</p>
+              <ul>
+                <li>予約電話の大幅削減</li>
+                <li>スタッフが接客に集中できる時間が増加</li>
+                <li>リピート購入につながる導線の確立</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 事例2: ニコリ -->
+        <div class="work-card">
+          <div class="work-phone-wrap">
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <img src="images/nicori.jpg" alt="珈琲焙煎＆カフェ ニコリ LINE設計スクリーンショット">
+              </div>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">架空設計事例</span>
+              <span class="work-place">📍 埼玉県熊谷市の焙煎店兼カフェ</span>
+            </div>
+            <h3 class="work-title">珈琲焙煎＆カフェ ニコリ</h3>
+            <div class="work-section">
+              <p class="work-section-label">📌 課題</p>
+              <p>コーヒー初心者は何を選べばいいかわからない。「相談できるお店」であることが、選ばれる理由になる。</p>
+            </div>
+            <div class="work-section">
+              <p class="work-section-label">✅ 施策</p>
+              <ul>
+                <li>リッチメニュー4分割「コーヒー診断」「メニュー」「オンラインショップ」「アクセス」</li>
+                <li>友だち追加後すぐにコーヒー診断を提示し、自分に合った豆をLINE上で提案</li>
+                <li>診断→カフェで試す→豆を購入、の購買導線を設計</li>
+                <li>LINEで気軽に相談できる窓口で信頼度を向上</li>
+              </ul>
+            </div>
+            <div class="work-section">
+              <p class="work-section-label">💡 想定効果</p>
+              <ul>
+                <li>初心者でも迷わず「自分の一杯」にたどり着ける</li>
+                <li>カフェ来店＋豆購入のセット率向上</li>
+                <li>LINE相談によるリピーター獲得</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 事例3: キナリ珈琲 -->
+        <div class="work-card">
+          <div class="work-phone-wrap">
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <img src="images/kinari.jpg" alt="キナリ珈琲 LINE設計スクリーンショット">
+              </div>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-meta">
+              <span class="work-tag">架空設計事例</span>
+              <span class="work-place">📍 群馬県高崎市の焙煎店</span>
+            </div>
+            <h3 class="work-title">キナリ珈琲</h3>
+            <div class="work-section">
+              <p class="work-section-label">📌 課題</p>
+              <p>「焙煎方法は？」「どんな豆ですか？」など同じ質問が毎日届き、返信対応がスタッフの大きな負担になっていた。</p>
+            </div>
+            <div class="work-section">
+              <p class="work-section-label">✅ 施策</p>
+              <ul>
+                <li>リッチメニュー3分割「コーヒー豆を見る」「営業時間」「アクセス」</li>
+                <li>よくある質問をキーワード自動応答で対応（焙煎方法・豆の特徴・保存方法など）</li>
+                <li>シンプルな導線設計でお客様が迷わず情報にたどり着ける構成に</li>
+              </ul>
+            </div>
+            <div class="work-section">
+              <p class="work-section-label">💡 想定効果</p>
+              <ul>
+                <li>問い合わせ返信の工数を大幅削減</li>
+                <li>スタッフが焙煎・接客などコア業務に集中できる</li>
+                <li>お客様もストレスなく知りたい情報にアクセスできる</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Contact</p>
+      <h2 class="section-title">お仕事のご相談は<br>お気軽にどうぞ</h2>
+      <p class="contact-sub">
+        まずはお気軽にご相談ください。<br>
+        フォームよりお問い合わせいただければ、<br>
+        2〜3日以内にGmailよりご返信いたします。
+      </p>
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLScbneitP0E0QKB9sMD-hcvxjwpXAkDVnnIVnLffluIp_Kb1_w/viewform"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+      >お問い合わせフォームへ →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-logo">そん.</p>
+    <p>© 2025 そん. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const btn = document.getElementById('hamburgerBtn');
+    const menu = document.getElementById('mobileMenu');
+    const links = document.querySelectorAll('.mobile-link');
+
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('open');
+      menu.classList.toggle('open');
+    });
+
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        btn.classList.remove('open');
+        menu.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
