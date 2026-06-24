@@ -1,32 +1,22 @@
-import Anthropic from '@anthropic-ai/sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const maxDuration = 30
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 export async function POST(req: NextRequest) {
   try {
     const { ingredients, freeText } = await req.json()
 
     const prompt = freeText
-      ? freeText
-      : `以下の食材を使って作れる夕食レシピを2つ提案してください：${ingredients.join('、')}。\n各レシピは「料理名」「材料」「簡単な作り方（3ステップ程度）」を含めてください。`
+      ? `あなたは日本の家庭料理に詳しい料理アドバイザーです。マークダウンを使わずシンプルなテキストで回答してください。\n\n${freeText}`
+      : `あなたは日本の家庭料理に詳しい料理アドバイザーです。マークダウンを使わずシンプルなテキストで回答してください。\n\n以下の食材を使って作れる夕食レシピを2つ提案してください：${ingredients.join('、')}。\n各レシピは「料理名」「材料」「簡単な作り方（3ステップ程度）」を含めてください。`
 
-    const message = await client.messages.create({
-      model: 'claude-3-5-haiku-20241022',
-      max_tokens: 512,
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      system:
-        '日本の家庭料理に詳しい料理アドバイザーです。簡単で美味しいレシピをわかりやすく提案します。マークダウンを使わず、シンプルなテキストで回答してください。',
-    })
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const result = await model.generateContent(prompt)
+    const text = result.response.text()
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
     return NextResponse.json({ suggestion: text })
   } catch (error) {
     console.error('AI suggest error:', error)
