@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       : `以下の食材を使って作れる夕食レシピを2つ提案してください：${ingredients.join('、')}。\n各レシピは「料理名」「材料」「簡単な作り方（3ステップ程度）」を含めてください。`
 
     const message = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+      model: 'claude-3-5-haiku-20241022',
       max_tokens: 512,
       messages: [
         {
