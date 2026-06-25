@@ -5,7 +5,7 @@ import { supabase, Meal } from '@/lib/supabase'
 import { format, addDays, startOfToday } from 'date-fns'
 import { ja } from 'date-fns/locale'
 
-const DAYS = 7
+const DAYS = 14
 
 export default function MealPlan({ code, meals, onRefresh }: {
   code: string
