@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ suggestion: text })
   } catch (error) {
     console.error('AI suggest error:', error)
-    return NextResponse.json({ suggestion: 'エラーが発生しました。しばらくしてからもう一度お試しください。' }, { status: 500 })
+    const msg = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ suggestion: `エラー: ${msg}` }, { status: 500 })
   }
 }
